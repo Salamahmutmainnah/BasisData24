@@ -1,0 +1,784 @@
+BASIS DATA TUGAS 1
+
+Setting environment for using XAMPP for Windows.
+Salamah Mutmainnah@LAPTOP-HSANPPUR c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 10
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+1. Membuat database baru dengan nama : dbpegawai
+MariaDB [(none)]> CREATE DATABASE dbpegawai;
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [(none)]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| crud               |
+| dbpegawai          |
+| dbpos              |
+| dbsi07             |
+| dbtesting          |
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+10 rows in set (0.001 sec)
+
+2.Masuk ke database dbpegawai dengan perintah USE
+MariaDB [(none)]> USE dbpegawai;
+Database changed
+
+3.Membuat Tabel divisi, dengan kolom id dan nama
+MariaDB [dbpegawai]> CREATE TABLE divisi;
+ERROR 1113 (42000): A table must have at least 1 column
+MariaDB [dbpegawai]> CREATE TABLE divisi(
+    -> id int primary key auto_increment,
+    -> nama varchar (30) not null unique);
+Query OK, 0 rows affected (0.107 sec)
+
+4.Menampilkan Deskripsi tabel Divisi
+MariaDB [dbpegawai]> DESC divisi;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.044 sec)
+
+5.Membuat Tabel jabatan, dengan kolom id dan nama
+MariaDB [dbpegawai]> CREATE TABLE jabatan(
+    -> id int primary key auto_increment,
+    -> nama varchar (30) not null unique);
+Query OK, 0 rows affected (0.053 sec)
+
+6.Menampilkan Deskripsi tabel Jabatan
+MariaDB [dbpegawai]> DESC jabatan;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.042 sec)
+
+7.Membuat Tabel pegawai, dengan kolom id, nip, nama, gender, tempat lahir, tanggal lahir, id divisi, id jabatan, dan alamat
+MariaDB [dbpegawai]> CREATE TABLE pegawai(
+    -> id int primary key auto_increment,
+    -> nip char(5) not null unique,
+    -> nama varchar (30) not null unique,
+    -> gender ENUM('Laki-laki','Perempuan') not null,
+    -> tmp_lahir varchar(30) not null,
+    -> tgl_lahir date not null,
+    -> iddivisi int null references divisi(id),
+    -> idjabatan int null references jabatan(id),
+    -> alamat text);
+Query OK, 0 rows affected (0.058 sec)
+
+8.Menampilkan Deskripsi tabel Pegawai
+MariaDB [dbpegawai]> DESC pegawai;
++-----------+-------------------------------+------+-----+---------+----------------+
+| Field     | Type                          | Null | Key | Default | Extra          |
++-----------+-------------------------------+------+-----+---------+----------------+
+| id        | int(11)                       | NO   | PRI | NULL    | auto_increment |
+| nip       | char(5)                       | NO   | UNI | NULL    |                |
+| nama      | varchar(30)                   | NO   | UNI | NULL    |                |
+| gender    | enum('Laki-laki','Perempuan') | NO   |     | NULL    |                |
+| tmp_lahir | varchar(30)                   | NO   |     | NULL    |                |
+| tgl_lahir | date                          | NO   |     | NULL    |                |
+| iddivisi  | int(11)                       | YES  |     | NULL    |                |
+| idjabatan | int(11)                       | YES  |     | NULL    |                |
+| alamat    | text                          | YES  |     | NULL    |                |
++-----------+-------------------------------+------+-----+---------+----------------+
+9 rows in set (0.043 sec)
+
+9.Menampilkan Deskripsi tabel pada dbpegawai
+MariaDB [dbpegawai]> SHOW TABLES;
++---------------------+
+| Tables_in_dbpegawai |
++---------------------+
+| divisi              |
+| jabatan             |
+| pegawai             |
++---------------------+
+3 rows in set (0.001 sec)
+
+10. Input data ke tabel divisi(SDM, Keuangan, Marketing, IT)
+MariaDB [dbpegawai]> INSERT INTO divisi VALUES
+    -> ('','SDM'),
+    -> ('','Keuangan'),
+    -> ('','Marketing'),
+    -> ('','IT');
+Query OK, 4 rows affected, 4 warnings (0.027 sec)
+Records: 4  Duplicates: 0  Warnings: 4
+
+11.Menampilkan seluruh Data Divisi
+MariaDB [dbpegawai]> SELECT * FROM divisi;
++----+-----------+
+| id | nama      |
++----+-----------+
+|  4 | IT        |
+|  2 | Keuangan  |
+|  3 | Marketing |
+|  1 | SDM       |
++----+-----------+
+4 rows in set (0.001 sec)
+
+12.Input data ke tabel jabatan(Direktur, Manajer, Asisten Manajer, Staff)
+MariaDB [dbpegawai]> INSERT INTO jabatan VALUES
+    -> ('','Direktur'),
+    -> ('','Manajer'),
+    -> ('','Asisten Manajer'),
+    -> ('','Staff');
+Query OK, 4 rows affected, 4 warnings (0.027 sec)
+Records: 4  Duplicates: 0  Warnings: 4
+
+13.Menampilkan seluruh Data Jabatan
+MariaDB [dbpegawai]> SELECT * FROM jabatan;
++----+-----------------+
+| id | nama            |
++----+-----------------+
+|  3 | Asisten Manajer |
+|  1 | Direktur        |
+|  2 | Manajer         |
+|  4 | Staff           |
++----+-----------------+
+4 rows in set (0.001 sec)
+
+14.Input 20 orang pegawai ke tabel pegawai (1 divisi 5 orang, untuk gender dan jabatan diacak)
+MariaDB [dbpegawai]> INSERT INTO pegawai VALUES
+    -> ('','98765','Raisa Aminah','Perempuan','Jakarta','1990-01-31',1,1,'jalan besok no.20,cikarang'),
+    -> ('','87659','Ruqyah Atifah','Perempuan','Bogor','1991-02-30',1,2,'jalan sekarang no.30,cirebon'),
+    -> ('','76598','Muhammad Santoso','Laki-laki','Banten','1992-03-29',1,3,'jalan kapan no.40,banten'),
+    -> ('','65987','Ridwan Asep','Laki-laki','Medan','1993-04-28',1,4,'jalan aja no.50,medan'),
+    -> ('','59876','Fadlan Amanah','Laki-laki','Padang','1994-05-27',2,1,'jalan kehidupan no.60,padang'),
+    -> ('','43210','Rissa Aqila','Perempuan','Bandung','1995-06-26',2,2,'jalan nyaman no.70,Bandung'),
+    -> ('','32104','Athifah Lupita','Perempuan','Jakarta Selatan','1996-07-25',2,3,'jalan cinta no.80,cikini'),
+    -> ('','21043','Rika Ananda','Perempuan','Tangerang Selatan','1997-08-24',2,4,'jalan utama no.90,tangerang selatan'),
+    -> ('','10432','Athala','Laki-laki','Depok','1998-09-23',3,1,'jalan bersama no.100,depok'),
+    -> ('','04321','Hartanto Abdillah','Laki-laki','Bekasi','1999-10-22',3,2,'jalan jual no.10,bekasi'),
+    -> ('','12345','Samudra','Laki-laki','Jakarta Timur','2000-11-21',3,3,'jalan gratis no.1,ambon'),
+    -> ('','23451','Siti Rafika','Perempuan','Surabaya','2001-12-20',3,4,'jalan bayar no.2,surabaya'),
+    -> ('','34512','Julia Cantika','Perempuan','Yogyakarta','2002-01-19',4,1,'jalan rusak no.3,depok baru'),
+    -> ('','45123','Putra Slamet','Laki-laki','Bogor','2003-02-18',4,2,'jalan yuk no.4,bogor'),
+    -> ('','51234','Hardianto','Laki-laki','Bandung','2004-03-17',4,3,'jalan kemana no.5,bandung'),
+    -> ('','67890','Putri Aisyah','Perempuan','Yogyakarta','2005-04-16',4,4,'jalan perbaikan no.6,pariaman'),
+    -> ('','78906','Hardianti Rahayu','Perempuan','Jakarta','2006-05-15',1,4,'jalan hatiku no.7,cirebon'),
+    -> ('','89067','Ahmad Riswandi','Laki-laki','Medan','2007-06-14',1,3,'jalan horas no.8,medan'),
+    -> ('','90678','Raja Ammar','Laki-laki','Bekasi','2008-07-13',1,2,'jalan panas no.9,bekasi'),
+    -> ('','06789','Dewi Rianti','Perempuan','Jakarta','2009-08-12',1,1,'jalan kebanggan no.18,bogor');
+Query OK, 20 rows affected, 21 warnings (0.030 sec)
+Records: 20  Duplicates: 0  Warnings: 21
+
+15.Menampilkan seluruh Data Pegawai
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+-------------------------------------+
+| id | nip   | nama              | gender    | tmp_lahir         | tgl_lahir  | iddivisi | idjabatan | alamat                              |
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+-------------------------------------+
+|  1 | 98765 | Raisa Aminah      | Perempuan | Jakarta           | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang          |
+|  2 | 87659 | Ruqyah Atifah     | Perempuan | Bogor             | 0000-00-00 |        1 |         2 | jalan sekarang no.30,cirebon        |
+|  3 | 76598 | Muhammad Santoso  | Laki-laki | Banten            | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten            |
+|  4 | 65987 | Ridwan Asep       | Laki-laki | Medan             | 1993-04-28 |        1 |         4 | jalan aja no.50,medan               |
+|  5 | 59876 | Fadlan Amanah     | Laki-laki | Padang            | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang        |
+|  6 | 43210 | Rissa Aqila       | Perempuan | Bandung           | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung          |
+|  7 | 32104 | Athifah Lupita    | Perempuan | Jakarta Selatan   | 1996-07-25 |        2 |         3 | jalan cinta no.80,cikini            |
+|  8 | 21043 | Rika Ananda       | Perempuan | Tangerang Selatan | 1997-08-24 |        2 |         4 | jalan utama no.90,tangerang selatan |
+|  9 | 10432 | Athala            | Laki-laki | Depok             | 1998-09-23 |        3 |         1 | jalan bersama no.100,depok          |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki | Bekasi            | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi             |
+| 11 | 12345 | Samudra           | Laki-laki | Jakarta Timur     | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon             |
+| 12 | 23451 | Siti Rafika       | Perempuan | Surabaya          | 2001-12-20 |        3 |         4 | jalan bayar no.2,surabaya           |
+| 13 | 34512 | Julia Cantika     | Perempuan | Yogyakarta        | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru         |
+| 14 | 45123 | Putra Slamet      | Laki-laki | Bogor             | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor                |
+| 15 | 51234 | Hardianto         | Laki-laki | Bandung           | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung           |
+| 16 | 67890 | Putri Aisyah      | Perempuan | Yogyakarta        | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman       |
+| 17 | 78906 | Hardianti Rahayu  | Perempuan | Jakarta           | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon           |
+| 18 | 89067 | Ahmad Riswandi    | Laki-laki | Medan             | 2007-06-14 |        1 |         3 | jalan horas no.8,medan              |
+| 19 | 90678 | Raja Ammar        | Laki-laki | Bekasi            | 2008-07-13 |        1 |         2 | jalan panas no.9,bekasi             |
+| 20 | 06789 | Dewi Rianti       | Perempuan | Jakarta           | 2009-08-12 |        1 |         1 | jalan kebanggan no.18,bogor         |
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+-------------------------------------+
+20 rows in set (0.001 sec)
+
+16. Mengubah data 5 orang pegawai (dengan mengubah 3 kolom)
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> set nama = 'Ucup Topan',tmp_lahir = 'Surabaya',alamat = 'jalan kaki aja no.45,surabaya'
+    -> where id in (9);
+Query OK, 1 row affected (0.028 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> set nama = 'Tholib',tgl_lahir = '20-10-2000',alamat ='jalan pintu hatimu no.12,medan'
+    -> where id in (18);
+Query OK, 1 row affected, 1 warning (0.027 sec)
+Rows matched: 1  Changed: 1  Warnings: 1
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    ->  set nama = 'Natasya Karmila',gender = 'Perempuan',tmp_lahir = 'Semarang'
+    -> where id in (15);
+Query OK, 1 row affected (0.027 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> set tmp_lahir = 'Yogyakarta',tgl_lahir = '01-01-2001',alamat = 'jalan menuju kesuksesan no.24,yogyakarta'
+    -> where id in (2);
+Query OK, 1 row affected, 1 warning (0.027 sec)
+Rows matched: 1  Changed: 1  Warnings: 1
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> set nama = 'Tarisa Amanda',tmp_lahir = 'Jakarta',tgl_lahir = '08-09-1998'
+    -> where id in (7);
+Query OK, 1 row affected, 1 warning (0.028 sec)
+Rows matched: 1  Changed: 1  Warnings: 1
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+
+| id | nip   | nama              | gender    | tmp_lahir         | tgl_lahir  | iddivisi | idjabatan | alamat                                   |
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+
+|  1 | 98765 | Raisa Aminah      | Perempuan | Jakarta           | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang               |
+|  2 | 87659 | Ruqyah Atifah     | Perempuan | Yogyakarta        | 0000-00-00 |        1 |         2 | jalan menuju kesuksesan no.24,yogyakarta |
+|  3 | 76598 | Muhammad Santoso  | Laki-laki | Banten            | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten                 |
+|  4 | 65987 | Ridwan Asep       | Laki-laki | Medan             | 1993-04-28 |        1 |         4 | jalan aja no.50,medan                    |
+|  5 | 59876 | Fadlan Amanah     | Laki-laki | Padang            | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang             |
+|  6 | 43210 | Rissa Aqila       | Perempuan | Bandung           | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung               |
+|  7 | 32104 | Tarisa Amanda     | Perempuan | Jakarta           | 0000-00-00 |        2 |         3 | jalan cinta no.80,cikini                 |
+|  8 | 21043 | Rika Ananda       | Perempuan | Tangerang Selatan | 1997-08-24 |        2 |         4 | jalan utama no.90,tangerang selatan      |
+|  9 | 10432 | Ucup Topan        | Laki-laki | Surabaya          | 1998-09-23 |        3 |         1 | jalan kaki aja no.45,surabaya            |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki | Bekasi            | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi                  |
+| 11 | 12345 | Samudra           | Laki-laki | Jakarta Timur     | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon                  |
+| 12 | 23451 | Siti Rafika       | Perempuan | Surabaya          | 2001-12-20 |        3 |         4 | jalan bayar no.2,surabaya                |
+| 13 | 34512 | Julia Cantika     | Perempuan | Yogyakarta        | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru              |
+| 14 | 45123 | Putra Slamet      | Laki-laki | Bogor             | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor                     |
+| 15 | 51234 | Natasya Karmila   | Perempuan | Semarang          | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung                |
+| 16 | 67890 | Putri Aisyah      | Perempuan | Yogyakarta        | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman            |
+| 17 | 78906 | Hardianti Rahayu  | Perempuan | Jakarta           | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon                |
+| 18 | 89067 | Tholib            | Laki-laki | Medan             | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan           |
+| 19 | 90678 | Raja Ammar        | Laki-laki | Bekasi            | 2008-07-13 |        1 |         2 | jalan panas no.9,bekasi                  |
+| 20 | 06789 | Dewi Rianti       | Perempuan | Jakarta           | 2009-08-12 |        1 |         1 | jalan kebanggan no.18,bogor              |
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+
+20 rows in set (0.001 sec)
+
+17.Menghapus 2 orang pegawai terakhir
+MariaDB [dbpegawai]> DELETE FROM pegawai where id = 20;
+Query OK, 1 row affected (0.065 sec)
+
+MariaDB [dbpegawai]> DELETE FROM pegawai where id = 19;
+Query OK, 1 row affected (0.026 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+
+| id | nip   | nama              | gender    | tmp_lahir         | tgl_lahir  | iddivisi | idjabatan | alamat                                   |
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+
+|  1 | 98765 | Raisa Aminah      | Perempuan | Jakarta           | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang               |
+|  2 | 87659 | Ruqyah Atifah     | Perempuan | Yogyakarta        | 0000-00-00 |        1 |         2 | jalan menuju kesuksesan no.24,yogyakarta |
+|  3 | 76598 | Muhammad Santoso  | Laki-laki | Banten            | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten                 |
+|  4 | 65987 | Ridwan Asep       | Laki-laki | Medan             | 1993-04-28 |        1 |         4 | jalan aja no.50,medan                    |
+|  5 | 59876 | Fadlan Amanah     | Laki-laki | Padang            | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang             |
+|  6 | 43210 | Rissa Aqila       | Perempuan | Bandung           | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung               |
+|  7 | 32104 | Tarisa Amanda     | Perempuan | Jakarta           | 0000-00-00 |        2 |         3 | jalan cinta no.80,cikini                 |
+|  8 | 21043 | Rika Ananda       | Perempuan | Tangerang Selatan | 1997-08-24 |        2 |         4 | jalan utama no.90,tangerang selatan      |
+|  9 | 10432 | Ucup Topan        | Laki-laki | Surabaya          | 1998-09-23 |        3 |         1 | jalan kaki aja no.45,surabaya            |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki | Bekasi            | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi                  |
+| 11 | 12345 | Samudra           | Laki-laki | Jakarta Timur     | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon                  |
+| 12 | 23451 | Siti Rafika       | Perempuan | Surabaya          | 2001-12-20 |        3 |         4 | jalan bayar no.2,surabaya                |
+| 13 | 34512 | Julia Cantika     | Perempuan | Yogyakarta        | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru              |
+| 14 | 45123 | Putra Slamet      | Laki-laki | Bogor             | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor                     |
+| 15 | 51234 | Natasya Karmila   | Perempuan | Semarang          | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung                |
+| 16 | 67890 | Putri Aisyah      | Perempuan | Yogyakarta        | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman            |
+| 17 | 78906 | Hardianti Rahayu  | Perempuan | Jakarta           | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon                |
+| 18 | 89067 | Tholib            | Laki-laki | Medan             | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan           |
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+
+18 rows in set (0.001 sec)
+
+18.Gunakan alter tabel pada tabel pegawai untuk menambahkan kolom baru berat_badan dengan tipe data float wajib diisi,lalu input berat badan semua pegawai secara acak
+MariaDB [dbpegawai]>  ALTER TABLE pegawai
+    -> add column berat_badan float not null;
+Query OK, 0 rows affected (0.030 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    ->  set berat_badan = floor(rand()*50) + 35;
+Query OK, 18 rows affected (0.024 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+-------------+
+| id | nip   | nama              | gender    | tmp_lahir         | tgl_lahir  | iddivisi | idjabatan | alamat                                   | berat_badan |
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+-------------+
+|  1 | 98765 | Raisa Aminah      | Perempuan | Jakarta           | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang               |          69 |
+|  2 | 87659 | Ruqyah Atifah     | Perempuan | Yogyakarta        | 0000-00-00 |        1 |         2 | jalan menuju kesuksesan no.24,yogyakarta |          63 |
+|  3 | 76598 | Muhammad Santoso  | Laki-laki | Banten            | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten                 |          74 |
+|  4 | 65987 | Ridwan Asep       | Laki-laki | Medan             | 1993-04-28 |        1 |         4 | jalan aja no.50,medan                    |          46 |
+|  5 | 59876 | Fadlan Amanah     | Laki-laki | Padang            | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang             |          72 |
+|  6 | 43210 | Rissa Aqila       | Perempuan | Bandung           | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung               |          39 |
+|  7 | 32104 | Tarisa Amanda     | Perempuan | Jakarta           | 0000-00-00 |        2 |         3 | jalan cinta no.80,cikini                 |          43 |
+|  8 | 21043 | Rika Ananda       | Perempuan | Tangerang Selatan | 1997-08-24 |        2 |         4 | jalan utama no.90,tangerang selatan      |          63 |
+|  9 | 10432 | Ucup Topan        | Laki-laki | Surabaya          | 1998-09-23 |        3 |         1 | jalan kaki aja no.45,surabaya            |          52 |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki | Bekasi            | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi                  |          36 |
+| 11 | 12345 | Samudra           | Laki-laki | Jakarta Timur     | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon                  |          41 |
+| 12 | 23451 | Siti Rafika       | Perempuan | Surabaya          | 2001-12-20 |        3 |         4 | jalan bayar no.2,surabaya                |          63 |
+| 13 | 34512 | Julia Cantika     | Perempuan | Yogyakarta        | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru              |          55 |
+| 14 | 45123 | Putra Slamet      | Laki-laki | Bogor             | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor                     |          51 |
+| 15 | 51234 | Natasya Karmila   | Perempuan | Semarang          | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung                |          57 |
+| 16 | 67890 | Putri Aisyah      | Perempuan | Yogyakarta        | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman            |          49 |
+| 17 | 78906 | Hardianti Rahayu  | Perempuan | Jakarta           | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon                |          39 |
+| 18 | 89067 | Tholib            | Laki-laki | Medan             | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan           |          63 |
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+-------------+
+18 rows in set (0.001 sec)
+
+19.Gunakan alter tabel pada tabel pegawai untuk menambahkan kolom baru umur dengan tipe data integer wajib diisi, lalu input umur semua pegawai secara acak
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> add column umur int not null;
+Query OK, 0 rows affected (0.030 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> set umur = floor(rand()*50) + 30;
+Query OK, 18 rows affected (0.003 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+| id | nip   | nama              | gender    | tmp_lahir         | tgl_lahir  | iddivisi | idjabatan | alamat                                   | berat_badan | umur |
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+|  1 | 98765 | Raisa Aminah      | Perempuan | Jakarta           | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang               |          69 |   59 |
+|  2 | 87659 | Ruqyah Atifah     | Perempuan | Yogyakarta        | 0000-00-00 |        1 |         2 | jalan menuju kesuksesan no.24,yogyakarta |          63 |   41 |
+|  3 | 76598 | Muhammad Santoso  | Laki-laki | Banten            | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten                 |          74 |   47 |
+|  4 | 65987 | Ridwan Asep       | Laki-laki | Medan             | 1993-04-28 |        1 |         4 | jalan aja no.50,medan                    |          46 |   33 |
+|  5 | 59876 | Fadlan Amanah     | Laki-laki | Padang            | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang             |          72 |   43 |
+|  6 | 43210 | Rissa Aqila       | Perempuan | Bandung           | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung               |          39 |   38 |
+|  7 | 32104 | Tarisa Amanda     | Perempuan | Jakarta           | 0000-00-00 |        2 |         3 | jalan cinta no.80,cikini                 |          43 |   31 |
+|  8 | 21043 | Rika Ananda       | Perempuan | Tangerang Selatan | 1997-08-24 |        2 |         4 | jalan utama no.90,tangerang selatan      |          63 |   64 |
+|  9 | 10432 | Ucup Topan        | Laki-laki | Surabaya          | 1998-09-23 |        3 |         1 | jalan kaki aja no.45,surabaya            |          52 |   45 |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki | Bekasi            | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi                  |          36 |   54 |
+| 11 | 12345 | Samudra           | Laki-laki | Jakarta Timur     | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon                  |          41 |   57 |
+| 12 | 23451 | Siti Rafika       | Perempuan | Surabaya          | 2001-12-20 |        3 |         4 | jalan bayar no.2,surabaya                |          63 |   45 |
+| 13 | 34512 | Julia Cantika     | Perempuan | Yogyakarta        | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru              |          55 |   71 |
+| 14 | 45123 | Putra Slamet      | Laki-laki | Bogor             | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor                     |          51 |   42 |
+| 15 | 51234 | Natasya Karmila   | Perempuan | Semarang          | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung                |          57 |   68 |
+| 16 | 67890 | Putri Aisyah      | Perempuan | Yogyakarta        | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman            |          49 |   33 |
+| 17 | 78906 | Hardianti Rahayu  | Perempuan | Jakarta           | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon                |          39 |   33 |
+| 18 | 89067 | Tholib            | Laki-laki | Medan             | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan           |          63 |   34 |
++----+-------+-------------------+-----------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+18 rows in set (0.001 sec)
+
+20.Gunakan alter tabel pada tabel pegawai untuk mengubah nama kolom gender menjadi jenis_kelamin
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> CHANGE COLUMN gender jenis_kelamin VARCHAR(10);
+Query OK, 18 rows affected, 3 warnings (0.092 sec)
+Records: 18  Duplicates: 0  Warnings: 3
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir         | tgl_lahir  | iddivisi | idjabatan | alamat                                   | berat_badan | umur |
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+|  1 | 98765 | Raisa Aminah      | Perempuan     | Jakarta           | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang               |          69 |   59 |
+|  2 | 87659 | Ruqyah Atifah     | Perempuan     | Yogyakarta        | 0000-00-00 |        1 |         2 | jalan menuju kesuksesan no.24,yogyakarta |          63 |   41 |
+|  3 | 76598 | Muhammad Santoso  | Laki-laki     | Banten            | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten                 |          74 |   47 |
+|  4 | 65987 | Ridwan Asep       | Laki-laki     | Medan             | 1993-04-28 |        1 |         4 | jalan aja no.50,medan                    |          46 |   33 |
+|  5 | 59876 | Fadlan Amanah     | Laki-laki     | Padang            | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang             |          72 |   43 |
+|  6 | 43210 | Rissa Aqila       | Perempuan     | Bandung           | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung               |          39 |   38 |
+|  7 | 32104 | Tarisa Amanda     | Perempuan     | Jakarta           | 0000-00-00 |        2 |         3 | jalan cinta no.80,cikini                 |          43 |   31 |
+|  8 | 21043 | Rika Ananda       | Perempuan     | Tangerang Selatan | 1997-08-24 |        2 |         4 | jalan utama no.90,tangerang selatan      |          63 |   64 |
+|  9 | 10432 | Ucup Topan        | Laki-laki     | Surabaya          | 1998-09-23 |        3 |         1 | jalan kaki aja no.45,surabaya            |          52 |   45 |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki     | Bekasi            | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi                  |          36 |   54 |
+| 11 | 12345 | Samudra           | Laki-laki     | Jakarta Timur     | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon                  |          41 |   57 |
+| 12 | 23451 | Siti Rafika       | Perempuan     | Surabaya          | 2001-12-20 |        3 |         4 | jalan bayar no.2,surabaya                |          63 |   45 |
+| 13 | 34512 | Julia Cantika     | Perempuan     | Yogyakarta        | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru              |          55 |   71 |
+| 14 | 45123 | Putra Slamet      | Laki-laki     | Bogor             | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor                     |          51 |   42 |
+| 15 | 51234 | Natasya Karmila   | Perempuan     | Semarang          | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung                |          57 |   68 |
+| 16 | 67890 | Putri Aisyah      | Perempuan     | Yogyakarta        | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman            |          49 |   33 |
+| 17 | 78906 | Hardianti Rahayu  | Perempuan     | Jakarta           | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon                |          39 |   33 |
+| 18 | 89067 | Tholib            | Laki-laki     | Medan             | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan           |          63 |   34 |
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+18 rows in set (0.002 sec)
+
+21.Menampilkan Kolom - kolom tertentu di tabel pegawai(nip, nama, jenis kelamin, dan alamat )
+MariaDB [dbpegawai]> SELECT nip, nama, jenis_kelamin, alamat
+    -> FROM pegawai;
++-------+-------------------+---------------+------------------------------------------+
+| nip   | nama              | jenis_kelamin | alamat                                   |
++-------+-------------------+---------------+------------------------------------------+
+| 98765 | Raisa Aminah      | Perempuan     | jalan besok no.20,cikarang               |
+| 87659 | Ruqyah Atifah     | Perempuan     | jalan menuju kesuksesan no.24,yogyakarta |
+| 76598 | Muhammad Santoso  | Laki-laki     | jalan kapan no.40,banten                 |
+| 65987 | Ridwan Asep       | Laki-laki     | jalan aja no.50,medan                    |
+| 59876 | Fadlan Amanah     | Laki-laki     | jalan kehidupan no.60,padang             |
+| 43210 | Rissa Aqila       | Perempuan     | jalan nyaman no.70,Bandung               |
+| 32104 | Tarisa Amanda     | Perempuan     | jalan cinta no.80,cikini                 |
+| 21043 | Rika Ananda       | Perempuan     | jalan utama no.90,tangerang selatan      |
+| 10432 | Ucup Topan        | Laki-laki     | jalan kaki aja no.45,surabaya            |
+| 04321 | Hartanto Abdillah | Laki-laki     | jalan jual no.10,bekasi                  |
+| 12345 | Samudra           | Laki-laki     | jalan gratis no.1,ambon                  |
+| 23451 | Siti Rafika       | Perempuan     | jalan bayar no.2,surabaya                |
+| 34512 | Julia Cantika     | Perempuan     | jalan rusak no.3,depok baru              |
+| 45123 | Putra Slamet      | Laki-laki     | jalan yuk no.4,bogor                     |
+| 51234 | Natasya Karmila   | Perempuan     | jalan kemana no.5,bandung                |
+| 67890 | Putri Aisyah      | Perempuan     | jalan perbaikan no.6,pariaman            |
+| 78906 | Hardianti Rahayu  | Perempuan     | jalan hatiku no.7,cirebon                |
+| 89067 | Tholib            | Laki-laki     | jalan pintu hatimu no.12,medan           |
++-------+-------------------+---------------+------------------------------------------+
+18 rows in set (0.001 sec)
+
+22.Menampilkan baris - baris tertentu di tabel pegawai (hanya gender laki - laki)
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> where jenis_kelamin = 'Laki-laki';
++----+-------+-------------------+---------------+---------------+------------+----------+-----------+--------------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir     | tgl_lahir  | iddivisi | idjabatan | alamat                         | berat_badan | umur |
++----+-------+-------------------+---------------+---------------+------------+----------+-----------+--------------------------------+-------------+------+
+|  3 | 76598 | Muhammad Santoso  | Laki-laki     | Banten        | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten       |          74 |   47 |
+|  4 | 65987 | Ridwan Asep       | Laki-laki     | Medan         | 1993-04-28 |        1 |         4 | jalan aja no.50,medan          |          46 |   33 |
+|  5 | 59876 | Fadlan Amanah     | Laki-laki     | Padang        | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang   |          72 |   43 |
+|  9 | 10432 | Ucup Topan        | Laki-laki     | Surabaya      | 1998-09-23 |        3 |         1 | jalan kaki aja no.45,surabaya  |          52 |   45 |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki     | Bekasi        | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi        |          36 |   54 |
+| 11 | 12345 | Samudra           | Laki-laki     | Jakarta Timur | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon        |          41 |   57 |
+| 14 | 45123 | Putra Slamet      | Laki-laki     | Bogor         | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor           |          51 |   42 |
+| 18 | 89067 | Tholib            | Laki-laki     | Medan         | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan |          63 |   34 |
++----+-------+-------------------+---------------+---------------+------------+----------+-----------+--------------------------------+-------------+------+
+8 rows in set (0.002 sec)
+
+23.Menampilkan baris - baris tertentu di tabel pegawai (yang bekerja di divisi IT dan gendernya perempuan
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> where iddivisi = 4 AND jenis_kelamin = 'Perempuan';
++----+-------+-----------------+---------------+------------+------------+----------+-----------+-------------------------------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                        | berat_badan | umur |
++----+-------+-----------------+---------------+------------+------------+----------+-----------+-------------------------------+-------------+------+
+| 13 | 34512 | Julia Cantika   | Perempuan     | Yogyakarta | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru   |          55 |   71 |
+| 15 | 51234 | Natasya Karmila | Perempuan     | Semarang   | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung     |          57 |   68 |
+| 16 | 67890 | Putri Aisyah    | Perempuan     | Yogyakarta | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman |          49 |   33 |
++----+-------+-----------------+---------------+------------+------------+----------+-----------+-------------------------------+-------------+------+
+3 rows in set (0.001 sec)
+
+24.Menampilkan data pegawai yang umurnya di atas 30 tahun dan lahirnya di kota jakarta dengan klausa WHERE, AND
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> where umur >30 AND tmp_lahir = 'jakarta';
++----+-------+------------------+---------------+-----------+------------+----------+-----------+----------------------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                     | berat_badan | umur |
++----+-------+------------------+---------------+-----------+------------+----------+-----------+----------------------------+-------------+------+
+|  1 | 98765 | Raisa Aminah     | Perempuan     | Jakarta   | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang |          69 |   59 |
+|  7 | 32104 | Tarisa Amanda    | Perempuan     | Jakarta   | 0000-00-00 |        2 |         3 | jalan cinta no.80,cikini   |          43 |   31 |
+| 17 | 78906 | Hardianti Rahayu | Perempuan     | Jakarta   | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon  |          39 |   33 |
++----+-------+------------------+---------------+-----------+------------+----------+-----------+----------------------------+-------------+------+
+3 rows in set (0.001 sec)
+
+25.Menampilkan data pegawai yang bekerja pada divisi marketing, berumur lebih dari 30 tahun dan berjenis kelamin perempuan dengan klausa WHERE, AND
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> where iddivisi = 3 AND umur >30 AND jenis_kelamin ='perempuan';
++----+-------+-------------+---------------+-----------+------------+----------+-----------+---------------------------+-------------+------+
+| id | nip   | nama        | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                    | berat_badan | umur |
++----+-------+-------------+---------------+-----------+------------+----------+-----------+---------------------------+-------------+------+
+| 12 | 23451 | Siti Rafika | Perempuan     | Surabaya  | 2001-12-20 |        3 |         4 | jalan bayar no.2,surabaya |          63 |   45 |
++----+-------+-------------+---------------+-----------+------------+----------+-----------+---------------------------+-------------+------+
+1 row in set (0.001 sec)
+
+26.Menampilkan data pegawai dengan klausa key (nip)
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> where nip = 12345;
++----+-------+---------+---------------+---------------+------------+----------+-----------+-------------------------+-------------+------+
+| id | nip   | nama    | jenis_kelamin | tmp_lahir     | tgl_lahir  | iddivisi | idjabatan | alamat                  | berat_badan | umur |
++----+-------+---------+---------------+---------------+------------+----------+-----------+-------------------------+-------------+------+
+| 11 | 12345 | Samudra | Laki-laki     | Jakarta Timur | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon |          41 |   57 |
++----+-------+---------+---------------+---------------+------------+----------+-----------+-------------------------+-------------+------+
+1 row in set (0.023 sec)
+
+27.Menampilkan data pegawai dengan klausa non key (gender)
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+	1. Perempuan
+    -> where jenis_kelamin ='perempuan';
++----+-------+------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir         | tgl_lahir  | iddivisi | idjabatan | alamat                                   | berat_badan | umur |
++----+-------+------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+|  1 | 98765 | Raisa Aminah     | Perempuan     | Jakarta           | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang               |          69 |   59 |
+|  2 | 87659 | Ruqyah Atifah    | Perempuan     | Yogyakarta        | 0000-00-00 |        1 |         2 | jalan menuju kesuksesan no.24,yogyakarta |          63 |   41 |
+|  6 | 43210 | Rissa Aqila      | Perempuan     | Bandung           | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung               |          39 |   38 |
+|  7 | 32104 | Tarisa Amanda    | Perempuan     | Jakarta           | 0000-00-00 |        2 |         3 | jalan cinta no.80,cikini                 |          43 |   31 |
+|  8 | 21043 | Rika Ananda      | Perempuan     | Tangerang Selatan | 1997-08-24 |        2 |         4 | jalan utama no.90,tangerang selatan      |          63 |   64 |
+| 12 | 23451 | Siti Rafika      | Perempuan     | Surabaya          | 2001-12-20 |        3 |         4 | jalan bayar no.2,surabaya                |          63 |   45 |
+| 13 | 34512 | Julia Cantika    | Perempuan     | Yogyakarta        | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru              |          55 |   71 |
+| 15 | 51234 | Natasya Karmila  | Perempuan     | Semarang          | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung                |          57 |   68 |
+| 16 | 67890 | Putri Aisyah     | Perempuan     | Yogyakarta        | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman            |          49 |   33 |
+| 17 | 78906 | Hardianti Rahayu | Perempuan     | Jakarta           | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon                |          39 |   33 |
++----+-------+------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+10 rows in set (0.001 sec)
+
+	2. Laki - laki
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> where jenis_kelamin = 'Laki-laki';
++----+-------+-------------------+---------------+---------------+------------+----------+-----------+--------------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir     | tgl_lahir  | iddivisi | idjabatan | alamat                         | berat_badan | umur |
++----+-------+-------------------+---------------+---------------+------------+----------+-----------+--------------------------------+-------------+------+
+|  3 | 76598 | Muhammad Santoso  | Laki-laki     | Banten        | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten       |          74 |   47 |
+|  4 | 65987 | Ridwan Asep       | Laki-laki     | Medan         | 1993-04-28 |        1 |         4 | jalan aja no.50,medan          |          46 |   33 |
+|  5 | 59876 | Fadlan Amanah     | Laki-laki     | Padang        | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang   |          72 |   43 |
+|  9 | 10432 | Ucup Topan        | Laki-laki     | Surabaya      | 1998-09-23 |        3 |         1 | jalan kaki aja no.45,surabaya  |          52 |   45 |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki     | Bekasi        | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi        |          36 |   54 |
+| 11 | 12345 | Samudra           | Laki-laki     | Jakarta Timur | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon        |          41 |   57 |
+| 14 | 45123 | Putra Slamet      | Laki-laki     | Bogor         | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor           |          51 |   42 |
+| 18 | 89067 | Tholib            | Laki-laki     | Medan         | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan |          63 |   34 |
++----+-------+-------------------+---------------+---------------+------------+----------+-----------+--------------------------------+-------------+------+
+8 rows in set (0.001 sec)
+
+28.Menampilkan data pegawai dengan klausa in (menyebutkan beberapa nip)
+MariaDB [dbpegawai]> SELECT nip FROM pegawai
+    -> where id = 2;
++-------+
+| nip   |
++-------+
+| 87659 |
++-------+
+1 row in set (0.013 sec)
+
+29.Menampilkan data pegawai dengan klausa non in (beberapa tempat lahir)
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> where tmp_lahir NOT IN ('Surabaya','Jakarta','Padang');
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir         | tgl_lahir  | iddivisi | idjabatan | alamat                                   | berat_badan | umur |
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+|  2 | 87659 | Ruqyah Atifah     | Perempuan     | Yogyakarta        | 0000-00-00 |        1 |         2 | jalan menuju kesuksesan no.24,yogyakarta |          63 |   41 |
+|  3 | 76598 | Muhammad Santoso  | Laki-laki     | Banten            | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten                 |          74 |   47 |
+|  4 | 65987 | Ridwan Asep       | Laki-laki     | Medan             | 1993-04-28 |        1 |         4 | jalan aja no.50,medan                    |          46 |   33 |
+|  6 | 43210 | Rissa Aqila       | Perempuan     | Bandung           | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung               |          39 |   38 |
+|  8 | 21043 | Rika Ananda       | Perempuan     | Tangerang Selatan | 1997-08-24 |        2 |         4 | jalan utama no.90,tangerang selatan      |          63 |   64 |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki     | Bekasi            | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi                  |          36 |   54 |
+| 11 | 12345 | Samudra           | Laki-laki     | Jakarta Timur     | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon                  |          41 |   57 |
+| 13 | 34512 | Julia Cantika     | Perempuan     | Yogyakarta        | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru              |          55 |   71 |
+| 14 | 45123 | Putra Slamet      | Laki-laki     | Bogor             | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor                     |          51 |   42 |
+| 15 | 51234 | Natasya Karmila   | Perempuan     | Semarang          | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung                |          57 |   68 |
+| 16 | 67890 | Putri Aisyah      | Perempuan     | Yogyakarta        | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman            |          49 |   33 |
+| 18 | 89067 | Tholib            | Laki-laki     | Medan             | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan           |          63 |   34 |
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+12 rows in set (0.001 sec)
+
+30.Menampilkan data pegawai berdasarkan nama secara ascending
+MariaDB [dbpegawai]> SELECT * FROM pegawai order by nama ASC;
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir         | tgl_lahir  | iddivisi | idjabatan | alamat                                   | berat_badan | umur |
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+|  5 | 59876 | Fadlan Amanah     | Laki-laki     | Padang            | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang             |          72 |   43 |
+| 17 | 78906 | Hardianti Rahayu  | Perempuan     | Jakarta           | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon                |          39 |   33 |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki     | Bekasi            | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi                  |          36 |   54 |
+| 13 | 34512 | Julia Cantika     | Perempuan     | Yogyakarta        | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru              |          55 |   71 |
+|  3 | 76598 | Muhammad Santoso  | Laki-laki     | Banten            | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten                 |          74 |   47 |
+| 15 | 51234 | Natasya Karmila   | Perempuan     | Semarang          | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung                |          57 |   68 |
+| 14 | 45123 | Putra Slamet      | Laki-laki     | Bogor             | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor                     |          51 |   42 |
+| 16 | 67890 | Putri Aisyah      | Perempuan     | Yogyakarta        | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman            |          49 |   33 |
+|  1 | 98765 | Raisa Aminah      | Perempuan     | Jakarta           | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang               |          69 |   59 |
+|  4 | 65987 | Ridwan Asep       | Laki-laki     | Medan             | 1993-04-28 |        1 |         4 | jalan aja no.50,medan                    |          46 |   33 |
+|  8 | 21043 | Rika Ananda       | Perempuan     | Tangerang Selatan | 1997-08-24 |        2 |         4 | jalan utama no.90,tangerang selatan      |          63 |   64 |
+|  6 | 43210 | Rissa Aqila       | Perempuan     | Bandung           | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung               |          39 |   38 |
+|  2 | 87659 | Ruqyah Atifah     | Perempuan     | Yogyakarta        | 0000-00-00 |        1 |         2 | jalan menuju kesuksesan no.24,yogyakarta |          63 |   41 |
+| 11 | 12345 | Samudra           | Laki-laki     | Jakarta Timur     | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon                  |          41 |   57 |
+| 12 | 23451 | Siti Rafika       | Perempuan     | Surabaya          | 2001-12-20 |        3 |         4 | jalan bayar no.2,surabaya                |          63 |   45 |
+|  7 | 32104 | Tarisa Amanda     | Perempuan     | Jakarta           | 0000-00-00 |        2 |         3 | jalan cinta no.80,cikini                 |          43 |   31 |
+| 18 | 89067 | Tholib            | Laki-laki     | Medan             | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan           |          63 |   34 |
+|  9 | 10432 | Ucup Topan        | Laki-laki     | Surabaya          | 1998-09-23 |        3 |         1 | jalan kaki aja no.45,surabaya            |          52 |   45 |
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+18 rows in set (0.023 sec)
+
+31.Menampilkan data pegawai dari yang berat badan paling gemuk ke paling kurus
+MariaDB [dbpegawai]> SELECT * FROM pegawai order by berat_badan DESC;
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir         | tgl_lahir  | iddivisi | idjabatan | alamat                                   | berat_badan | umur |
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+|  3 | 76598 | Muhammad Santoso  | Laki-laki     | Banten            | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten                 |          74 |   47 |
+|  5 | 59876 | Fadlan Amanah     | Laki-laki     | Padang            | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang             |          72 |   43 |
+|  1 | 98765 | Raisa Aminah      | Perempuan     | Jakarta           | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang               |          69 |   59 |
+|  2 | 87659 | Ruqyah Atifah     | Perempuan     | Yogyakarta        | 0000-00-00 |        1 |         2 | jalan menuju kesuksesan no.24,yogyakarta |          63 |   41 |
+|  8 | 21043 | Rika Ananda       | Perempuan     | Tangerang Selatan | 1997-08-24 |        2 |         4 | jalan utama no.90,tangerang selatan      |          63 |   64 |
+| 12 | 23451 | Siti Rafika       | Perempuan     | Surabaya          | 2001-12-20 |        3 |         4 | jalan bayar no.2,surabaya                |          63 |   45 |
+| 18 | 89067 | Tholib            | Laki-laki     | Medan             | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan           |          63 |   34 |
+| 15 | 51234 | Natasya Karmila   | Perempuan     | Semarang          | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung                |          57 |   68 |
+| 13 | 34512 | Julia Cantika     | Perempuan     | Yogyakarta        | 2002-01-19 |        4 |         1 | jalan rusak no.3,depok baru              |          55 |   71 |
+|  9 | 10432 | Ucup Topan        | Laki-laki     | Surabaya          | 1998-09-23 |        3 |         1 | jalan kaki aja no.45,surabaya            |          52 |   45 |
+| 14 | 45123 | Putra Slamet      | Laki-laki     | Bogor             | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor                     |          51 |   42 |
+| 16 | 67890 | Putri Aisyah      | Perempuan     | Yogyakarta        | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman            |          49 |   33 |
+|  4 | 65987 | Ridwan Asep       | Laki-laki     | Medan             | 1993-04-28 |        1 |         4 | jalan aja no.50,medan                    |          46 |   33 |
+|  7 | 32104 | Tarisa Amanda     | Perempuan     | Jakarta           | 0000-00-00 |        2 |         3 | jalan cinta no.80,cikini                 |          43 |   31 |
+| 11 | 12345 | Samudra           | Laki-laki     | Jakarta Timur     | 2000-11-21 |        3 |         3 | jalan gratis no.1,ambon                  |          41 |   57 |
+|  6 | 43210 | Rissa Aqila       | Perempuan     | Bandung           | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung               |          39 |   38 |
+| 17 | 78906 | Hardianti Rahayu  | Perempuan     | Jakarta           | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon                |          39 |   33 |
+| 10 | 04321 | Hartanto Abdillah | Laki-laki     | Bekasi            | 1999-10-22 |        3 |         2 | jalan jual no.10,bekasi                  |          36 |   54 |
++----+-------+-------------------+---------------+-------------------+------------+----------+-----------+------------------------------------------+-------------+------+
+18 rows in set (0.001 sec)
+
+32.Menampilkan data 5 pegawai teratas gunakan klausa limit
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> limit 5;
++----+-------+------------------+---------------+------------+------------+----------+-----------+------------------------------------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                                   | berat_badan | umur |
++----+-------+------------------+---------------+------------+------------+----------+-----------+------------------------------------------+-------------+------+
+|  1 | 98765 | Raisa Aminah     | Perempuan     | Jakarta    | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang               |          69 |   59 |
+|  2 | 87659 | Ruqyah Atifah    | Perempuan     | Yogyakarta | 0000-00-00 |        1 |         2 | jalan menuju kesuksesan no.24,yogyakarta |          63 |   41 |
+|  3 | 76598 | Muhammad Santoso | Laki-laki     | Banten     | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten                 |          74 |   47 |
+|  4 | 65987 | Ridwan Asep      | Laki-laki     | Medan      | 1993-04-28 |        1 |         4 | jalan aja no.50,medan                    |          46 |   33 |
+|  5 | 59876 | Fadlan Amanah    | Laki-laki     | Padang     | 1994-05-27 |        2 |         1 | jalan kehidupan no.60,padang             |          72 |   43 |
++----+-------+------------------+---------------+------------+------------+----------+-----------+------------------------------------------+-------------+------+
+5 rows in set (0.001 sec)
+
+33.Menampilkan data 5 pegawai terbawah gunakan klausa limit offset
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> limit 5 offset 13;
++----+-------+------------------+---------------+------------+------------+----------+-----------+--------------------------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                         | berat_badan | umur |
++----+-------+------------------+---------------+------------+------------+----------+-----------+--------------------------------+-------------+------+
+| 14 | 45123 | Putra Slamet     | Laki-laki     | Bogor      | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor           |          51 |   42 |
+| 15 | 51234 | Natasya Karmila  | Perempuan     | Semarang   | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung      |          57 |   68 |
+| 16 | 67890 | Putri Aisyah     | Perempuan     | Yogyakarta | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman  |          49 |   33 |
+| 17 | 78906 | Hardianti Rahayu | Perempuan     | Jakarta    | 2006-05-15 |        1 |         4 | jalan hatiku no.7,cirebon      |          39 |   33 |
+| 18 | 89067 | Tholib           | Laki-laki     | Medan      | 0000-00-00 |        1 |         3 | jalan pintu hatimu no.12,medan |          63 |   34 |
++----+-------+------------------+---------------+------------+------------+----------+-----------+--------------------------------+-------------+------+
+5 rows in set (0.022 sec)
+
+34.Menampilkan jumlah pegawai gunakan fungsi aggregrat count
+MariaDB [dbpegawai]> SELECT count(*) as jumlah_pegawai
+    -> FROM pegawai;
++----------------+
+| jumlah_pegawai |
++----------------+
+|             18 |
++----------------+
+1 row in set (0.024 sec)
+
+35.Menampilkan  nip,nama pegawai, umur yg paling tua gunakan fungsi aggregrat max (kombinasi dengan sub query)
+MariaDB [dbpegawai]> SELECT nip,nama,umur
+    -> FROM pegawai Where umur =(
+    -> select MAX(umur) FROM pegawai);
++-------+---------------+------+
+| nip   | nama          | umur |
++-------+---------------+------+
+| 34512 | Julia Cantika |   71 |
++-------+---------------+------+
+1 row in set (0.024 sec)
+
+36.Menampilkan  nip,nama pegawai, berat_badan yg paling kurus gunakan fungsi aggregrat min(kombinasi dengan sub query)
+MariaDB [dbpegawai]> SELECT nip,nama,umur
+    -> FROM pegawai where berat_badan =(
+    -> select MIN(berat_badan) FROM pegawai);
++-------+-------------------+------+
+| nip   | nama              | umur |
++-------+-------------------+------+
+| 04321 | Hartanto Abdillah |   54 |
++-------+-------------------+------+
+1 row in set (0.001 sec)
+
+37.Menampilkan data rata2 umur pegawai gunakan fungsi aggregrat avg
+MariaDB [dbpegawai]> SELECT AVG(umur) AS rata_umur FROM pegawai;
++-----------+
+| rata_umur |
++-----------+
+|   46.5556 |
++-----------+
+1 row in set (0.001 sec)
+
+38.Menampilkan  jumlah data pegawai yang laki2 dan berumur lebih dari 40 tahun dan berjabatan Manajer, gunakan fungsi aggregrat count dan klausa AND 
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai FROM pegawai
+    -> WHERE jenis_kelamin = 'Laki-laki' AND umur > 40 AND idjabatan= 2;
++----------------+
+| jumlah_pegawai |
++----------------+
+|              2 |
++----------------+
+1 row in set (0.001 sec)
+
+39.Menampilkan jumlah data pegawai yang perempuan dan berumur kurang dari 40 tahun dan berjabatan Staff, gunakan fungsi aggregrat count dan klausa AND
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai FROM pegawai
+    ->  WHERE jenis_kelamin = 'Perempuan' AND umur < 40 AND idjabatan= 4;
++----------------+
+| jumlah_pegawai |
++----------------+
+|              2 |
++----------------+
+1 row in set (0.001 sec)
+
+40.Menampilkan jumlah data pegawai yang perempuan gunakan fungsi aggregrat count
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai_perempuan FROM pegawai
+    -> WHERE jenis_kelamin = 'Perempuan';
++--------------------------+
+| jumlah_pegawai_perempuan |
++--------------------------+
+|                       10 |
++--------------------------+
+1 row in set (0.001 sec)
+
+41.Menampilkan  jumlah pegawai yang bekerja di divisi SDM dengan fungsi aggregrat sum dan klausa WHERE 
+MariaDB [dbpegawai]> SELECT sum(id) as total_pegawai from pegawai where iddivisi=(1);
++---------------+
+| total_pegawai |
++---------------+
+|            45 |
++---------------+
+1 row in set (0.001 sec)
+
+42.Menampilkan jumlah pegawai berdasarkan divisi masing2 menggunakan fungsi aggregrat count dan klausa group by
+MariaDB [dbpegawai]> select iddivisi ,COUNT(*) AS jumlah_pegawai FROM pegawai GROUP by iddivisi;
++----------+----------------+
+| iddivisi | jumlah_pegawai |
++----------+----------------+
+|        1 |              6 |
+|        2 |              4 |
+|        3 |              4 |
+|        4 |              4 |
++----------+----------------+
+4 rows in set (0.001 sec)
+
+43.Menampilkan data jumlah pegawai berdasarkan gender, yg jumlah minimal 10 orang (gunakan group by dan having)
+MariaDB [dbpegawai]> select jenis_kelamin ,COUNT(*) AS jumlah_pegawai FROM pegawai GROUP by jenis_kelamin HAVING COUNT(*) >= 10;
++---------------+----------------+
+| jenis_kelamin | jumlah_pegawai |
++---------------+----------------+
+| Perempuan     |             10 |
++---------------+----------------+
+1 row in set (0.001 sec)
+
+44.Menampilkan data pegawai yang berawalan kata Muhammad
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nama like 'Muhammad%';
++----+-------+------------------+---------------+-----------+------------+----------+-----------+--------------------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                   | berat_badan | umur |
++----+-------+------------------+---------------+-----------+------------+----------+-----------+--------------------------+-------------+------+
+|  3 | 76598 | Muhammad Santoso | Laki-laki     | Banten    | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten |          74 |   47 |
++----+-------+------------------+---------------+-----------+------------+----------+-----------+--------------------------+-------------+------+
+1 row in set (0.024 sec)
+
+45.Menampilkan data pegawai yang berakhiran kata Santoso
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nama like '%Santoso';
++----+-------+------------------+---------------+-----------+------------+----------+-----------+--------------------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                   | berat_badan | umur |
++----+-------+------------------+---------------+-----------+------------+----------+-----------+--------------------------+-------------+------+
+|  3 | 76598 | Muhammad Santoso | Laki-laki     | Banten    | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten |          74 |   47 |
++----+-------+------------------+---------------+-----------+------------+----------+-----------+--------------------------+-------------+------+
+1 row in set (0.001 sec)
+
+46.Menampilkan data pegawai yang mengandung kata Asep
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nama like '%Asep%';
++----+-------+-------------+---------------+-----------+------------+----------+-----------+-----------------------+-------------+------+
+| id | nip   | nama        | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat                | berat_badan | umur |
++----+-------+-------------+---------------+-----------+------------+----------+-----------+-----------------------+-------------+------+
+|  4 | 65987 | Ridwan Asep | Laki-laki     | Medan     | 1993-04-28 |        1 |         4 | jalan aja no.50,medan |          46 |   33 |
++----+-------+-------------+---------------+-----------+------------+----------+-----------+-----------------------+-------------+------+
+1 row in set (0.001 sec)
+
+47.Menampilkan data pegawai yang huruf kelimanya huruf S
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nama like '%__s%';
++----+-------+------------------+---------------+------------+------------+----------+-----------+-------------------------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir  | tgl_lahir  | iddivisi | idjabatan | alamat                        | berat_badan | umur |
++----+-------+------------------+---------------+------------+------------+----------+-----------+-------------------------------+-------------+------+
+|  1 | 98765 | Raisa Aminah     | Perempuan     | Jakarta    | 1990-01-31 |        1 |         1 | jalan besok no.20,cikarang    |          69 |   59 |
+|  3 | 76598 | Muhammad Santoso | Laki-laki     | Banten     | 1992-03-29 |        1 |         3 | jalan kapan no.40,banten      |          74 |   47 |
+|  4 | 65987 | Ridwan Asep      | Laki-laki     | Medan      | 1993-04-28 |        1 |         4 | jalan aja no.50,medan         |          46 |   33 |
+|  6 | 43210 | Rissa Aqila      | Perempuan     | Bandung    | 1995-06-26 |        2 |         2 | jalan nyaman no.70,Bandung    |          39 |   38 |
+|  7 | 32104 | Tarisa Amanda    | Perempuan     | Jakarta    | 0000-00-00 |        2 |         3 | jalan cinta no.80,cikini      |          43 |   31 |
+| 14 | 45123 | Putra Slamet     | Laki-laki     | Bogor      | 2003-02-18 |        4 |         2 | jalan yuk no.4,bogor          |          51 |   42 |
+| 15 | 51234 | Natasya Karmila  | Perempuan     | Semarang   | 2004-03-17 |        4 |         3 | jalan kemana no.5,bandung     |          57 |   68 |
+| 16 | 67890 | Putri Aisyah     | Perempuan     | Yogyakarta | 2005-04-16 |        4 |         4 | jalan perbaikan no.6,pariaman |          49 |   33 |
++----+-------+------------------+---------------+------------+------------+----------+-----------+-------------------------------+-------------+------+
+8 rows in set (0.001 sec)
+
+
+
